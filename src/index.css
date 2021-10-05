@@ -5,9 +5,89 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 2rem 0 0 2rem;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+.App{
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  justify-content: center;
+  gap: 50px;
+}
+
+li{
+  list-style: none;
+}
+.contactCard{
+  padding: 20px 0;
+  border-top: solid 1px rgb(216, 216, 216);
+  display: flex;
+  gap: 31px;
+}
+.contactCard .contactImage{
+  width: 246px;
+  height: 150px;
+  position: relative;
+}
+.contactCard .contactImage img{
+  width: 246px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 15px 15px 15px 0;
+}
+.contactText .contactTextTitle{
+  font-weight: bold;
+  font-size: 18px;
+  color: #000;
+}
+
+.contactText{
+  color: #989898;
+}
+
+.contactText a{
+  color: #000;
+}
+.contactText div {
+	margin: 0.4rem 0;
+}
+.contactTextAll{
+  column-count: 2;
+  margin-top: 10px!important;
+}
+.contactFilter{
+  margin: 2rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+.contactSearch label, .contactSearch input {
+  display: block;
+}
+.contactSearch input{
+  padding: .5rem 1rem;
+  border: 1px solid #ccc;
+}
+.contactSearch label{
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+  font-size: 15px;
+  font-weight: bold;
+}
+.contactCategories label, .contactCategories input {
+  display: block;
+}
+.contactCategories select{
+  padding: .5rem 1rem;
+  border: 1px solid #ccc;
+}
+.contactCategories label{
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+  font-size: 15px;
+  font-weight: bold;
 }
