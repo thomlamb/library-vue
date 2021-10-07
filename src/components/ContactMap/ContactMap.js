@@ -94,7 +94,7 @@ function ContentMap(props) {
 
   const position = [50.850340, 4.351710];
   return (
-    <div>
+    <div className="r-map annuaire-map">
       <MapContainer center={position} zoom={9}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

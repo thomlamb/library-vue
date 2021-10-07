@@ -36,7 +36,7 @@ const CategoriesFilter = (props) => {
     }),
   }
   return (
-    <div>
+    <div className="r-filter categories-Filter">
       <span>Catégories</span>
       <Select
         className="select-custom-class library-categories"

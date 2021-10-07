@@ -10,24 +10,25 @@ const ContactList = ({contactArray,onChange, onHover}) => {
       onHover(event);
     }
   return (
-      <div className="content">
+      <ul className="r-result-list annuaire-result-list">
         {contactArray.map((contactItem,i)=>(
-            <li onMouseEnter={() => handleHover(contactItem.UID)} 
+            <li className="r-list-item-group" 
+                onMouseEnter={() => handleHover(contactItem.UID)} 
                 onMouseLeave={() => handleHover(null)} 
                 onClick={() => handleClick(contactItem.UID)} >
-            <Link style={{ textDecoration: 'none' }} to={{
+            <Link className="r-list-item-link" style={{ textDecoration: 'none' }} to={{
               pathname: `/${contactItem.UID}`,
               state : {
                 idItem : contactItem.UID
               }
               }}
             >
-              <ContactCard contactItem={contactItem} key={contactItem.created} />
             </Link>
+              <ContactCard contactItem={contactItem} key={contactItem.created} />
             </li>
           ))
         }   
-      </div>
+      </ul>
   );
 };
 export default ContactList;

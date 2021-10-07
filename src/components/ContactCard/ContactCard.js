@@ -15,51 +15,48 @@ const ContactCard = ({ contactItem }) => {
 
 
 	return (
-		<div className="contactCard">
-			<div className="contactImage">
-			<img
-				src={
-					contactItem.image
-						? contactItem.image.scales.preview.download
-						: imgPlaceholder
-				}
-				alt={"alt de l'image"}
-			/>
+		<div className="r-list-item">
+			<div className="r-item-img" 
+			style={{backgroundImage: 
+				contactItem.image ? 'url('+contactItem.image.scales.preview.download+')' : 
+				'url('+imgPlaceholder + ')'} }
+			>
 			</div>
 
-			<div className="contactText">
-				<div className="contactTextTitle">
-					<span className="title">{title}</span>
-				</div>
-				<div className="contactTextAll">
-						{category ? (<span>{category}</span>) : ""}
-					<div className="adresse"> 
+			<div className="r-item-text">
+				<span className="r-item-title">{title}</span>
+				{category ? (<span className="r-item-categorie">{category}</span>) : ""}
+				<div className="r-item-all">
+					<div className="r-item-adresse"> 
 						{number ? (<span>{number + " "}</span>) : ""}
 						{street ? (<span>{street + ", "}</span>) : ""}
 						{complement ? (<span>{complement + ", "}</span>) : ""}
+						<br />
 						{zipcode ? (<span>{zipcode + " "}</span>) : ""}
 						{city ? (<span>{city}</span>) : ""}
-					</div>
 					<div className="itineraty">
 						{street
 							? (<a href={"https://www.google.com/maps/dir/?api=1&destination=" +street + "+" +number+ "+"+ complement+ "+"+zipcode+ "+"+city+"+"+country}>Itinéraire</a>)
 							: ""
 						}
 					</div>
-					<div className="phones">
-						{phones
-							? (phones.map((phone) =>{return <span>{phone.number}</span>})): ""
-						}
 					</div>
-					<div className="mails">
-						{mails
-							? (mails.map((mail) =>{return <span>{mail.mail_address}</span>})): ""
-						}
-					</div>
-					<div className="topics">
-						{topics
-							? (topics.map((mail) =>{return <span>{mail.title}</span>})): ""
-						}
+					<div className="r-item-contact">
+						<div className="phones">
+							{phones
+								? (phones.map((phone) =>{return <span>{phone.number}</span>})): ""
+							}
+						</div>
+						<div className="mails">
+							{mails
+								? (mails.map((mail) =>{return <span>{mail.mail_address}</span>})): ""
+							}
+						</div>
+						<div className="topics">
+							{topics
+								? (topics.map((mail) =>{return <span>{mail.title}</span>})): ""
+							}
+						</div>
 					</div>
 				</div>
 			</div>

@@ -14,6 +14,9 @@ import categories from './data/categories';
 import CategoriesFilter from './components/CategoriesFilter/CategoriesFilter'
 import TopicsFilter from './components/TopicsFilter/TopicsFilter'
 import FacilitiesFilter from './components/FacilitiesFilter/FacilitiesFilter'
+import data from './data/data.json'
+import header from './assets/header.png';
+
 
 
 
@@ -32,7 +35,7 @@ function App() {
 
   const directoryApi = async () => {
     try {
-      const contacts = await axios.get('http://localhost:8080/Plone5/mon-annuaire/@directory', {
+      const contacts = await axios.get(data, {
         headers: {
           "Accept": "application/json"
         }
@@ -46,7 +49,9 @@ function App() {
   };
 
   useEffect(() => {
-    directoryApi();
+    setcontactArray(data.items);
+    // directoryApi();
+
     // eslint-disable-next-line
   }, [contactResults, loadmore]);
 
@@ -106,21 +111,26 @@ function App() {
       );
     }
   }
+
+  console.log(contactArray)
   return (
     <Router>
-      <div className="App">
-        <div>
-            <form className="contactSearch">
+      <div>
+        <img className="headerimg" src={header} />
+      </div>
+      <div className="r-wrapper r-annuaire-wrapper">
+        <div className="r-result r-annuaire-result">
+            {/* <form className="contactSearch">
               <label for="fname">Recherche</label>
               <input type="text" placeholder="Mots clés" onChange={(e) => setSearch(e.target.value)} />
-            </form>
+            </form> */}
 
           <Switch>
             <Route exact path="/">
-            <div className="contactFilter">
-            <TopicsFilter onChange={topicsChange} contactArray={contactArray} />
-            <CategoriesFilter onChange={CategoriesChange} contactArray={contactArray} />
-            <FacilitiesFilter onChange={FacilitiesChange} contactArray={contactArray} />
+            <div className="r-result-filter annuaire-result-filter">
+              <TopicsFilter onChange={topicsChange} contactArray={contactArray} />
+              <CategoriesFilter onChange={CategoriesChange} contactArray={contactArray} />
+              <FacilitiesFilter onChange={FacilitiesChange} contactArray={contactArray} />
             </div>
               <ContactList onChange={clickID} onHover={hoverID}  contactArray={contactArrayFilter} />
             </Route>
@@ -131,6 +141,7 @@ function App() {
         </div>
         <ContactMap clickId={clickId} hoverId={hoverId} items={contactArrayFilter} />
       </div>
+      <div className="footer"></div>
     </Router>
   );
 }

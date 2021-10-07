@@ -29,7 +29,7 @@ const FacilitiesFilter = (props) => {
         props.onChange(event);
       }
     return (
-        <div>
+        <div className="r-filter facilities-Filter">
             <span>Facilité</span>
             <Select
             className="select-custom-class library-facilities"
