@@ -78,16 +78,18 @@ li{
   font-size: 15px;
   font-weight: bold;
 }
-.contactCategories label, .contactCategories input {
-  display: block;
+
+.select-custom-class{
+  width: 200px;
+  margin-top: 0.5rem;
 }
-.contactCategories select{
-  padding: .5rem 1rem;
-  border: 1px solid #ccc;
+.library-categories{
+  width: 300px;
 }
-.contactCategories label{
-  text-transform: uppercase;
-  margin-bottom: .5rem;
-  font-size: 15px;
+
+.contactFilter > div > span{
   font-weight: bold;
+  text-transform: uppercase;
+  font-size: 15px;
+  padding-bottom: 1rem;
 }

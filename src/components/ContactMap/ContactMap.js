@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import iconSvg from '../../assets/pin.svg';
-import iconSvgActivated from '../../assets/pin-active.svg';
+import iconSvg from '../../assets/location-bla.svg';
+import iconSvgActivated from '../../assets/location-active-bla.svg';
 
 import './map.css';
 import "leaflet/dist/leaflet.css";
 
-function ChangeMapView({ coords, arrayOfLatLngs }) {
+function ChangeMapView({ activeItem, arrayOfLatLngs }) {
   const map = useMap();
-
-  if (coords) {
+  if (activeItem) {
     const activeCoord = [];
-    activeCoord.push(coords.geolocation.latitude)
-    activeCoord.push(coords.geolocation.longitude)
+    activeCoord.push(activeItem.geolocation.latitude)
+    activeCoord.push(activeItem.geolocation.longitude)
     map.setView(activeCoord, 15);
   } else {
     let bounds = new L.LatLngBounds(arrayOfLatLngs);
@@ -24,8 +23,10 @@ function ChangeMapView({ coords, arrayOfLatLngs }) {
 
 function ContentMap(props) {
   const [activeItem, setActiveItem] = useState(null);
+  const [hoverItem, setHoverItem] = useState(null);
+
   const [allPosition, setAllPosition] = useState(null);
-  let popid = 99
+
 
   function mapIcon(url) {
     return new L.Icon({
@@ -34,18 +35,47 @@ function ContentMap(props) {
     });
   }
   const getMarkerIcon = (index) => {
+    if(index === props.clickId){
+      return mapIcon(iconSvgActivated);
+    }
     if(index === props.hoverId){
       return mapIcon(iconSvgActivated);
     }
     return mapIcon(iconSvg);
-
+  }
+  const getMarkerZindex = (index) => {
+    if(index === props.clickId){
+      return 999
+    }
+    if(index === props.hoverId){
+      return 999;
+    }
+    return 1;
   }
   
   useEffect(() => {
-    if (popid !== null) {
-      setActiveItem(props.items && props.items[props.hoverId])
+    if (props.clickId !== null) {
+      var result = props.items && props.items.filter(obj => {
+        return obj.UID === props.clickId
+      })
+      setActiveItem(result[0])
+
     } else (
       setActiveItem(null)
+    )
+  }, [props.clickId]);
+
+
+
+  useEffect(() => {
+    if (props.hoverId) {
+      var result = props.items && props.items.filter(obj => {
+        return obj.UID === props.hoverId
+      })
+      setHoverItem(result[0])
+
+    } else (
+      setHoverItem(null)
     )
   }, [props.hoverId]);
 
@@ -71,12 +101,13 @@ function ContentMap(props) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {allPosition != null && (
-          <ChangeMapView coords={activeItem} arrayOfLatLngs={allPosition} />
+          <ChangeMapView activeItem={activeItem}  arrayOfLatLngs={allPosition} />
         )}
         {props.items && props.items.map((mark, id) => (
           <Marker
-            key={id}
-            icon={getMarkerIcon(id)}
+            key={mark.UID}
+            icon={getMarkerIcon(mark.UID)}
+            zIndexOffset={getMarkerZindex(mark.UID)}
             position={[
               mark.geolocation.latitude,
               mark.geolocation.longitude

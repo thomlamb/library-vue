@@ -1,23 +1,32 @@
 import axios from "axios";
 import { useEffect, useCallback, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import ContactContent from "./components/ContactContent/ContactContent";
 import ContactList from "./components/ContactList/ContactList";
 import ContactMap from "./components/ContactMap/ContactMap";
 import ContactCard from "./components/ContactCard/ContactCard";
 import categories from './data/categories';
 import CategoriesFilter from './components/CategoriesFilter/CategoriesFilter'
+import TopicsFilter from './components/TopicsFilter/TopicsFilter'
+import FacilitiesFilter from './components/FacilitiesFilter/FacilitiesFilter'
+
 
 
 
 function App() {
-  const [category, setCategory] = useState("general");
   const [contactArray, setcontactArray] = useState([]);
   const [contactResults, setcontactResults] = useState();
   const [loadmore, setloadmore] = useState(20);
   const [search, setSearch] = useState("");
   const [contactArrayFilter, setcontactArrayFilter] = useState([]);
-  const [hoverId, setHoverId] = useState("null");
-  const [topicsArray, settopicsArray] = useState([]);
+  const [clickId, setClickId] = useState(null);
+  const [hoverId, setHoverId] = useState(null);
+
 
 
 
@@ -30,7 +39,6 @@ function App() {
       });
       setcontactArray(contacts.data.items);
       setcontactResults(contacts.data.items.length);
-      // setcategoryArray(contacts.data.items);
     } catch (error) {
       console.log("test error");
 
@@ -44,9 +52,14 @@ function App() {
 
 
 
+  const clickID = (id) => {
+    setClickId(id);
+  }
+
   const hoverID = (id) => {
     setHoverId(id);
   }
+
   useEffect(() => {
     setcontactArrayFilter(
       contactArray.filter((contact) =>
@@ -55,78 +68,70 @@ function App() {
     );
   }, [search, contactArray]);
 
-  const setCategoryChange = (value) => {
-    setcontactArrayFilter(
-      contactArray.filter((contact) =>
-        contact.taxonomy_contact_category[0].title.toLowerCase().includes(value.toLowerCase())
-      )
-    );
+  const topicsChange = (value) => {
+    if (value === null) {
+      setcontactArrayFilter(contactArray)
+    } else {
+      const cleanArray = contactArray.filter(contact => contact.topics != null);
+      setcontactArrayFilter(
+        cleanArray.filter((topics) =>
+          topics.topics[0].title.includes(value.value)
+        )
+      );
+    }
   }
 
-  useEffect(() => {
-    if(contactArray.length > 0){
-        const arr = [];
-        contactArray.map((item,i) => {
-          if(item.topics != null){
-            arr.push(item.topics[0].title);
-          }
-        });
-        const uniqueSet = new Set(arr);
-        const backToArray = [...uniqueSet];
-        settopicsArray(backToArray)
+  const CategoriesChange = (value) => {
+    if (value === null) {
+      setcontactArrayFilter(contactArray)
+    } else {
+      const cleanArray = contactArray.filter(contact => contact.taxonomy_contact_category != null);
+      setcontactArrayFilter(
+        cleanArray.filter((contact) =>
+          contact.taxonomy_contact_category[0].title.includes(value.value)
+        )
+      );
     }
-  }, [contactArray]);
+  }
 
-  const setTopicsChange = (value) => {
-    const cleanArray = contactArray.filter(contact => contact.topics != null);
-    setcontactArrayFilter(
-      cleanArray.filter((topics) =>
-      topics.topics[0].title.includes(value)
-      )
-    );
-
-    // setcontactArrayFilter(
-    //   cleanArray.filter((contact) =>{
-    //     contact.topics[0].title.toLowerCase().includes(value.toLowerCase())
-    //   })
-    // );
-
-
-
-    console.log(contactArrayFilter)
+  const FacilitiesChange = (value) => {
+    if (value === null) {
+      setcontactArrayFilter(contactArray)
+    } else {
+      const cleanArray = contactArray.filter(contact => contact.facilities != null);
+      setcontactArrayFilter(
+        cleanArray.filter((contact) =>
+          contact.facilities[0].title.includes(value.value)
+        )
+      );
+    }
   }
   return (
-    <div className="App">
-      <div>
-        <div className="contactFilter">
-          <form className="contactSearch">
-            <label for="fname">Recherche</label>
-            <input type="text" placeholder="Mots clés" onChange={(e) => setSearch(e.target.value)} />
-          </form>
+    <Router>
+      <div className="App">
+        <div>
+            <form className="contactSearch">
+              <label for="fname">Recherche</label>
+              <input type="text" placeholder="Mots clés" onChange={(e) => setSearch(e.target.value)} />
+            </form>
 
-          <form className="contactCategories">
-            <label for="fname">Catégories</label>
-            <select onChange={(e) => setCategoryChange(e.target.value)} as="select" custom>
-              <option value={"all"}>Toutes les catégories</option>
-              {categories && categories.map((option, i) => <option key={i}>{option}</option>)}
-            </select>
-          </form>
-
-          <form className="contactCategories">
-            <label for="fname">Thématiques</label>
-            <select onChange={(e) => setTopicsChange(e.target.value)} as="select" custom>
-              <option value={"all"}>Toutes les catégories</option>
-              {topicsArray && topicsArray.map((option, i) => <option key={i}>{option}</option>)}
-            </select>
-          </form>
-
-          {/* <CategoriesFilter contactArray={contactArray} /> */}
+          <Switch>
+            <Route exact path="/">
+            <div className="contactFilter">
+            <TopicsFilter onChange={topicsChange} contactArray={contactArray} />
+            <CategoriesFilter onChange={CategoriesChange} contactArray={contactArray} />
+            <FacilitiesFilter onChange={FacilitiesChange} contactArray={contactArray} />
+            </div>
+              <ContactList onChange={clickID} onHover={hoverID}  contactArray={contactArrayFilter} />
+            </Route>
+            <Route path="/:id">
+              <ContactContent onChange={clickID} contactArray={contactArray} />
+            </Route>
+          </Switch>
         </div>
-        <ContactList onChange={hoverID} contactArray={contactArrayFilter} />
+        <ContactMap clickId={clickId} hoverId={hoverId} items={contactArrayFilter} />
       </div>
-      <ContactMap hoverId={hoverId} items={contactArrayFilter} />
-
-    </div>
+    </Router>
   );
 }
 
