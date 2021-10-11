@@ -16,9 +16,7 @@ import TopicsFilter from './components/TopicsFilter/TopicsFilter'
 import FacilitiesFilter from './components/FacilitiesFilter/FacilitiesFilter'
 import data from './data/data.json'
 import header from './assets/header.png';
-
-
-
+import useAxios from "./assets/customHooks/useAxios";
 
 
 function App() {
@@ -30,7 +28,24 @@ function App() {
   const [clickId, setClickId] = useState(null);
   const [hoverId, setHoverId] = useState(null);
 
+//   const { response, loading, error } = useAxios({
+//     method: 'get',
+//     url: 'https://thesimpsonsquoteapi.glitch.me/quotes',
+//     headers: JSON.stringify({ accept: '*/*',  'Access-Control-Allow-Origin': 't, }),
+//     body: JSON.stringify({
+//         userId: 1,
+//         id: 19392,
+//         title: 'title',
+//         body: 'Sample text',
+//     }),
+// });
+//   const [data, setData] = useState([]);
 
+//   useEffect(() => {
+//       if (response !== null) {
+//           setData(response);
+//       }
+//   }, [response]);
 
 
   const directoryApi = async () => {
@@ -49,13 +64,11 @@ function App() {
   };
 
   useEffect(() => {
-    setcontactArray(data.items);
-    // directoryApi();
+    // setcontactArray(data.items);
+    directoryApi();
 
     // eslint-disable-next-line
   }, [contactResults, loadmore]);
-
-
 
   const clickID = (id) => {
     setClickId(id);
@@ -111,8 +124,6 @@ function App() {
       );
     }
   }
-
-  console.log(contactArray)
   return (
     <Router>
       <div>
